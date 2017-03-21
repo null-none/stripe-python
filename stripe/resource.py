@@ -893,7 +893,20 @@ class Coupon(CreateableAPIResource, UpdateableAPIResource,
 
 
 class Event(ListableAPIResource):
-    pass
+
+    @classmethod
+    def from_payload(cls, payload, received_sig=None, secret=None):
+        if received_sig:
+            if not secret:
+                raise ValueError("You passed a signature but not a secret")
+
+            expected_sig = util.compute_webhook_signature(payload, secret)
+            if not util.constant_time_compare(expected_sig, received_sig):
+                raise Exception("Invalid signature!")  # TODO: custom exception
+
+        event_json = util.json.loads(payload)
+        stripe_account = event_json.get('user_id', None)
+        event = convert_to_stripe_object(event_json, stripe.api_key, stripe_account)
 
 
 class Transfer(CreateableAPIResource, UpdateableAPIResource,

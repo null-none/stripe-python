@@ -118,6 +118,16 @@ SAMPLE_INVOICE = stripe.util.json.loads("""
 }
 """)
 
+SAMPLE_EVENT_PAYLOAD = """{
+  "id": "evt_test",
+  "object": "event"
+}"""
+
+SAMPLE_EVENT_SIGNATURE_SECRET = 'hunter2'
+
+SAMPLE_EVENT_SIGNATURE = \
+    '1046e44e277d650062c9bc6620a067db5accb109089f13d9b78cc0dcc3cae9a7'
+
 
 class StripeTestCase(unittest2.TestCase):
     RESTORE_ATTRIBUTES = ('api_version', 'api_key', 'client_id')
